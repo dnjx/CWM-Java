@@ -10,13 +10,13 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Please enter a number: ");
-        int user_num = scanner.nextByte();
+        int user_num = scanner.nextInt();
 
-        if (user_num % fizz_num == 0 && user_num%buzz_num == 0)
+        if (user_num % fizz_num == 0 && user_num % buzz_num == 0)
             System.out.println("FizzBuzz");
-        else if (user_num%fizz_num == 0)
+        else if (user_num % fizz_num == 0)
             System.out.println("Fizz");
-        else if (user_num%buzz_num == 0)
+        else if (user_num % buzz_num == 0)
             System.out.println("Buzz");
         else System.out.println(user_num);
     }
