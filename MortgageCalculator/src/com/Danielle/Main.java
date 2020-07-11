@@ -49,8 +49,6 @@ public class Main {
     }
 
     public static double calculateMonthlyInterestRate(double interestAmount) {
-        //final byte PERCENT = 100;
-
         double annualInterestRate = interestAmount / PERCENT;
         double monthlyInterestRate = annualInterestRate / MONTHS_IN_YEAR;
 
