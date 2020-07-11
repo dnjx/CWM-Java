@@ -6,57 +6,43 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        //principal annual interest rate period
+        int principal = (int)readNumber("Principal: ", 1000 ,1000000);
+        float interestAmount = (float)readNumber("Annual interest rate: ", 1, 30);
+        byte loanPeriod = (byte)readNumber("Loan period (Years): ", 1, 30);
+
+        double monthlyPayment = calculateMortgate(principal, interestAmount, loanPeriod);
+
+        String monthlyPaymentFormatted = NumberFormat.getCurrencyInstance().format(monthlyPayment);
+        System.out.println("Your monthly payment is: "  + monthlyPaymentFormatted);
+    }
+
+    public static double readNumber (String prompt, double min, double max) {
+        Scanner scanner = new Scanner(System.in);
+        double value = 0;
+        while (true) {
+            System.out.print(prompt);
+            value = scanner.nextDouble();
+            if (value >= min && value <= max)
+                break;
+            System.out.println("Enter a value between " + min + " and " + max);
+        }
+        return value;
+    }
+
+    public static double calculateMortgate(
+            int principal,
+            double interestAmount,
+            byte loanPeriod) {
+
         final byte MONTHS_IN_YEAR = 12;
         final byte PERCENT = 100;
-        final int MIN_PRINCIPAL = 1000;
-        final int MAX_PRINCIPAL = 1_000_000;
 
-        int principal = 0;
-        double interestAmount = 0.0;
-        byte loanPeriod = 0;
-        double annualInterestRate = 0.0;
-        double monthlyInterestRate = 0.0;
-        int numPayments = 0;
-        Scanner scanner = new Scanner(System.in);
-
-
-        while (true) {
-            System.out.print("Principal: ");
-            principal = scanner.nextInt();
-            if (principal >= MIN_PRINCIPAL && principal <= MAX_PRINCIPAL)
-                break;
-            System.out.println("Invalid amount. Please enter a principal amount between $1k and $1M.");
-        }
-        while (true) {
-            System.out.print("Annual interest rate: ");
-            interestAmount = scanner.nextDouble();
-            if (interestAmount > 0.0 && interestAmount <= 30) {
-                annualInterestRate = interestAmount / PERCENT;
-                monthlyInterestRate = annualInterestRate / MONTHS_IN_YEAR;
-                break;
-            }
-            System.out.println("Invalid amount. Please enter an interest rate between 0.1% and 30%.");
-        }
-        while (true) {
-            System.out.print("Loan period:  ");
-            loanPeriod = scanner.nextByte();
-            if(loanPeriod >= 1 && loanPeriod <= 30) {
-                numPayments = loanPeriod * MONTHS_IN_YEAR;
-                break;
-            }
-            System.out.println("Invalid period. Please enter a loan period between 1 & 30 years.");
-        }
-
-        double numerator = monthlyInterestRate * (Math.pow(1 + monthlyInterestRate, numPayments));
-        double denominator = (Math.pow(1 + monthlyInterestRate, numPayments)) - 1;
-        double monthly_payment = principal * (numerator/denominator);
-
-        String monthly_payment_formatted = NumberFormat.getCurrencyInstance().format(monthly_payment);
-        System.out.println("Your principal amount is: " + principal);
-        System.out.println("Your annual interest rate is: " + annualInterestRate);
-        System.out.println("Your load period is: " + loanPeriod + " years");
-        System.out.println("Your monthly payment is: "  + monthly_payment_formatted);
-
+        short numPayments = (short)(loanPeriod * MONTHS_IN_YEAR);
+        double annualInterestRate = interestAmount / PERCENT;
+        double monthlyInterestRate = annualInterestRate / MONTHS_IN_YEAR;
+        double monthlyPayment = principal * (monthlyInterestRate * (Math.pow(1 + monthlyInterestRate, numPayments))) /
+                ((Math.pow(1 + monthlyInterestRate, numPayments)) - 1);
+        return monthlyPayment;
     }
+
 }
