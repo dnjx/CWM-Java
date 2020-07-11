@@ -4,6 +4,8 @@ import java.text.NumberFormat;
 import java.util.Scanner;
 
 public class Main {
+    final static short MONTHS_IN_YEAR = 12;
+    final static byte PERCENT = 100;
 
     public static void main(String[] args) {
         int principal = (int)readNumber("Principal: ", 1000 ,1000000);
@@ -14,10 +16,23 @@ public class Main {
                 principal,
                 calculateMonthlyInterestRate(interestAmount),
                 calculateNumPayments(loanPeriod));
-        calculateBalances(principal, calculateMonthlyInterestRate(interestAmount), calculateNumPayments(loanPeriod));
 
         String monthlyPaymentFormatted = NumberFormat.getCurrencyInstance().format(monthlyPayment);
-        System.out.println("Your monthly payment is: "  + monthlyPaymentFormatted);
+        System.out.println("Mortgage");
+        System.out.println("_______");
+        System.out.println("Monthly payments of: "  + monthlyPaymentFormatted);
+        System.out.println("");
+        System.out.println("Payment schedule");
+        System.out.println("----------------");
+
+        for (short month = 1; month <= loanPeriod * MONTHS_IN_YEAR; month++ ) {
+            double balance = calculateBalance(principal,
+                    calculateMonthlyInterestRate(interestAmount),
+                    calculateNumPayments(loanPeriod),
+                    month);
+            String balanceFormatted = NumberFormat.getCurrencyInstance().format(balance);
+            System.out.println("Balance end of month " + month + ": " + balanceFormatted);
+        }
     }
 
     public static double readNumber (String prompt, double min, double max) {
@@ -34,14 +49,12 @@ public class Main {
     }
 
     public static double calculateMonthlyInterestRate(double interestAmount) {
-        final byte MONTHS_IN_YEAR = 12;
-        final byte PERCENT = 100;
+        //final byte PERCENT = 100;
 
         double annualInterestRate = interestAmount / PERCENT;
         double monthlyInterestRate = annualInterestRate / MONTHS_IN_YEAR;
 
         return monthlyInterestRate;
-
     }
 
     public static short calculateNumPayments(short loanPeriod) {
@@ -60,21 +73,14 @@ public class Main {
         return monthlyPayment;
     }
 
-    //TODO: Remove loop from method. Looping should be done in main method.
-    public static void calculateBalances(
+    public static double calculateBalance(
             int principal,
             double monthlyInterestRate,
-            short numPayments) {
-        double balance = principal;
-        short paymentsMade = 1;
-        while(balance > 0) {
-            balance = (principal*((Math.pow(1+monthlyInterestRate, numPayments)) - (Math.pow(1+monthlyInterestRate, paymentsMade)))) /
+            short numPayments,
+            short numPaymentsMade) {
+        double balance = (principal*((Math.pow(1+monthlyInterestRate, numPayments)) - (Math.pow(1+monthlyInterestRate, numPaymentsMade)))) /
                     (Math.pow(1+monthlyInterestRate, numPayments)-1);
-             paymentsMade++;
-             String balanceFormatted = NumberFormat.getCurrencyInstance().format(balance);
-             System.out.println(balanceFormatted);
 
-        }
+        return balance;
     }
-
 }
