@@ -10,7 +10,11 @@ public class Main {
         float interestAmount = (float)readNumber("Annual interest rate: ", 1, 30);
         byte loanPeriod = (byte)readNumber("Loan period (Years): ", 1, 30);
 
-        double monthlyPayment = calculateMortgate(principal, interestAmount, loanPeriod);
+        double monthlyPayment = calculateMortgate(
+                principal,
+                calculateMonthlyInterestRate(interestAmount),
+                calculateNumPayments(loanPeriod));
+        calculateBalances(principal, calculateMonthlyInterestRate(interestAmount), calculateNumPayments(loanPeriod));
 
         String monthlyPaymentFormatted = NumberFormat.getCurrencyInstance().format(monthlyPayment);
         System.out.println("Your monthly payment is: "  + monthlyPaymentFormatted);
@@ -29,20 +33,47 @@ public class Main {
         return value;
     }
 
-    public static double calculateMortgate(
-            int principal,
-            double interestAmount,
-            byte loanPeriod) {
-
+    public static double calculateMonthlyInterestRate(double interestAmount) {
         final byte MONTHS_IN_YEAR = 12;
         final byte PERCENT = 100;
 
-        short numPayments = (short)(loanPeriod * MONTHS_IN_YEAR);
         double annualInterestRate = interestAmount / PERCENT;
         double monthlyInterestRate = annualInterestRate / MONTHS_IN_YEAR;
+
+        return monthlyInterestRate;
+
+    }
+
+    public static short calculateNumPayments(short loanPeriod) {
+        short MONTHS_IN_YEAR = 12;
+        short numPayments = (short)(loanPeriod * MONTHS_IN_YEAR);
+
+        return numPayments;
+    }
+
+    public static double calculateMortgate(
+            int principal,
+            double monthlyInterestRate,
+            short numPayments) {
         double monthlyPayment = principal * (monthlyInterestRate * (Math.pow(1 + monthlyInterestRate, numPayments))) /
                 ((Math.pow(1 + monthlyInterestRate, numPayments)) - 1);
         return monthlyPayment;
+    }
+
+    public static void calculateBalances(
+            int principal,
+            double monthlyInterestRate,
+            short numPayments) {
+        double balance = principal;
+        short paymentsMade = 1;
+        while(balance > 0) {
+            balance = (principal*((Math.pow(1+monthlyInterestRate, numPayments)) - (Math.pow(1+monthlyInterestRate, paymentsMade)))) /
+                    (Math.pow(1+monthlyInterestRate, numPayments)-1);
+             paymentsMade++;
+             String balanceFormatted = NumberFormat.getCurrencyInstance().format(balance);
+             System.out.println(balanceFormatted);
+
+        }
     }
 
 }
