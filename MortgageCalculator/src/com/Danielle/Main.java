@@ -12,19 +12,26 @@ public class Main {
         float interestAmount = (float)readNumber("Annual interest rate: ", 1, 30);
         byte loanPeriod = (byte)readNumber("Loan period (Years): ", 1, 30);
 
+        printMortgage(principal, interestAmount, loanPeriod);
+
+        printPaymentSchedule(principal, interestAmount, loanPeriod);
+    }
+
+    public static void printMortgage(int principal, float interestAmount, byte loanPeriod) {
         double monthlyPayment = calculateMortgate(
                 principal,
                 calculateMonthlyInterestRate(interestAmount),
                 calculateNumPayments(loanPeriod));
-
         String monthlyPaymentFormatted = NumberFormat.getCurrencyInstance().format(monthlyPayment);
         System.out.println("Mortgage");
         System.out.println("_______");
         System.out.println("Monthly payments of: "  + monthlyPaymentFormatted);
-        System.out.println("");
+    }
+
+    public static void printPaymentSchedule(int principal, float interestAmount, byte loanPeriod) {
+        System.out.println();
         System.out.println("Payment schedule");
         System.out.println("----------------");
-
         for (short month = 1; month <= loanPeriod * MONTHS_IN_YEAR; month++ ) {
             double balance = calculateBalance(principal,
                     calculateMonthlyInterestRate(interestAmount),
