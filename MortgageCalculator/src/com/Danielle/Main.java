@@ -60,6 +60,7 @@ public class Main {
         return monthlyPayment;
     }
 
+    //TODO: Remove loop from method. Looping should be done in main method.
     public static void calculateBalances(
             int principal,
             double monthlyInterestRate,
