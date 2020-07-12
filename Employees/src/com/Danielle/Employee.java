@@ -2,7 +2,7 @@ package com.Danielle;
 
 public class Employee {
     //we set these to private so that they cannot be directly accessed outside of this class.
-    //we access, set, and do error handling through getters and setters. 
+    //we access, set, and do error handling through getters and setters.
     private int baseSalary;
     private int hourlyRate;
 
@@ -16,7 +16,7 @@ public class Employee {
         this.baseSalary = baseSalary;
     }
 
-    public int getBaseSalary() {
+    private int getBaseSalary() {
         return baseSalary;
     }
 
@@ -26,7 +26,7 @@ public class Employee {
         this.hourlyRate = hourlyRate;
     }
 
-    public int getHourlyRate() {
+    private int getHourlyRate() {
         return hourlyRate;
     }
 }
