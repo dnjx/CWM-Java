@@ -1,11 +1,8 @@
 package com.Danielle;
 
 import java.text.NumberFormat;
-import java.util.Arrays;
 
 public class MortgageReport {
-//    private double monthlyPayment = ;
-//    private String monthlyPaymentFormatted;
 
     public static void printMortgage(double monthlyPayment) {
         String monthlyPaymentFormatted = NumberFormat.getCurrencyInstance().format(monthlyPayment);
